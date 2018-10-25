@@ -93,6 +93,37 @@ ElementType delete(MaxHeap mx){
 一次性放进数组：先按输入顺序放入数组
 调整：再从第一个有孩子的节点(mx->size/2)开始向下调整，知道根节点 
 */
+MaxHeap createMaxHeap(ElementType *elements, int size, int capacity){
+	//一次性放进数组
+	MaxHeap mx = malloc(sizeof(struct Heap));
+	mx->elements  = malloc( (capacity+1)*sizeof(ElementType) );
+	for(int i=1; i<=size; i++)
+		mx->elements[i] = elements[i-1];
+	mx->size = size;
+	mx->capacity = capacity;
+	mx->elements[0] = MaxData;
+	
+	//调整
+	for(int i=mx->size/2; i>0; i--){
+		int parent,child;
+		ElementType temp = mx->elements[i];
+		for(parent=i; parent*2<=mx->size; parent=child){
+			child = parent*2;	//child先指向做孩子
+			if( child<mx->size && //有右孩子
+				mx->elements[child] < mx->elements[child+1]) //右孩子比较大
+				child++;
+			/*child指向较大的孩子*/
+			if( temp >= mx->elements[child])	//比孩子大
+				break;
+			else
+				mx->elements[parent] = mx->elements[child];	//较大的孩子上去
+		}
+		mx->elements[parent] = temp;
+	}
+
+	return mx;
+}
+
 int main(){
 	//建堆 一个一个插入进去 时间复杂度O(NlogN)
 	printf("%s", "请输入堆中初始节点数(不超过10)：");
@@ -109,6 +140,13 @@ int main(){
 	
 	for(int i=0;i<size;i++)
 		printf("%d ",delete(mx));
+	printf("\n");
+
+	//直接创建大顶堆
+	int ks[8] = {33,34,0,-102,111,7,9,8};
+	MaxHeap mx2 = createMaxHeap(ks,8,10);
+	for(int i=0;i<8;i++)
+		printf("%d ",delete(mx2));
 	printf("\n");
 
 	return 0;

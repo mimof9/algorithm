@@ -45,14 +45,14 @@ void Dijkstra(int(*am)[vertex], int source){
 			path[w] = source;
 
 	while(1){
-		int v = getMinDist(dist, S);	//未收录定点中dist最小的节点v
+		int v = getMinDist(dist, S);	//未收录顶点中dist最小的节点v
 		if(!v) break;		//v不存在
 		S[v-1] = 1;
 		for(int w=0; w<vertex; ++w)
 			if(am[v-1][w]!=INT_MAX && S[w] == 0)	//v没有被访问过的邻接点
 				if(dist[v-1]+am[v-1][w] < dist[w]){
 					dist[w] = dist[v-1]+am[v-1][w];
-					path[w] = v;		//存的原点到w+1的最短路径的w之前的节点v
+					path[w] = v;		//存的起点到w+1的最短路径的w之前的节点v
 				}
 	}
 	
